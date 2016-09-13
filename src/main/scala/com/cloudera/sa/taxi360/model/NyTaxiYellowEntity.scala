@@ -1,7 +1,7 @@
 package com.cloudera.sa.taxi360.model
 
+import org.apache.kudu.client.RowResult
 import org.apache.spark.sql.Row
-import org.kududb.client.RowResult
 
 class NyTaxiYellowEntity (val vender_id:String = "",
                           val total_trips:Int = 0,

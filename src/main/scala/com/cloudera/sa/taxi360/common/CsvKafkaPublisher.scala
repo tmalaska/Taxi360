@@ -1,6 +1,7 @@
 package com.cloudera.sa.taxi360.common
 
 import java.io.File
+import java.util.Random
 
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
@@ -9,10 +10,19 @@ import scala.io.Source
 object CsvKafkaPublisher {
 
   var counter = 0
+  var salts = 0
 
   def main(args:Array[String]): Unit = {
     if (args.length == 0) {
-      println("<brokerList> <topicName> <dataFolderOrFile> <sleepPerRecord> <acks> <linger.ms> <producer.type> <batch.size>")
+      println("<brokerList> " +
+        "<topicName> " +
+        "<dataFolderOrFile> " +
+        "<sleepPerRecord> " +
+        "<acks> " +
+        "<linger.ms> " +
+        "<producer.type> " +
+        "<batch.size> " +
+        "<salts>")
       return
     }
 
@@ -24,6 +34,7 @@ object CsvKafkaPublisher {
     val lingerMs = args(5).toInt
     val producerType = args(6) //"async"
     val batchSize = args(7).toInt
+    salts = args(8).toInt
 
     val kafkaProducer = KafkaProducerUntil.getNewProducer(kafkaBrokerList, acks, lingerMs, producerType, batchSize)
 
@@ -46,6 +57,8 @@ object CsvKafkaPublisher {
   def processFile(file:File, kafkaTopicName:String,
                   kafkaProducer: KafkaProducer[String, String], sleepPerRecord:Int): Unit = {
     var counter = 0
+    val r = new Random()
+
     println("-Starting Reading")
     Source.fromFile(file).getLines().foreach(l => {
       counter += 1
@@ -56,7 +69,12 @@ object CsvKafkaPublisher {
         print(".")
       }
       Thread.sleep(sleepPerRecord)
-      publishTaxiRecord(l, kafkaTopicName, kafkaProducer)
+
+      val saltedVender = r.nextInt(salts) + l
+
+      if (counter > 2) {
+        publishTaxiRecord(saltedVender, kafkaTopicName, kafkaProducer)
+      }
     })
   }
 

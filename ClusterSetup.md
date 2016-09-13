@@ -1,5 +1,5 @@
 #Install CM 
-ssh root@ted-training-1-1.vpc.cloudera.com
+ssh root@ted-cap1-mergejoin-tests-1.vpc.cloudera.com
 
 wget http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin
 
@@ -7,13 +7,15 @@ chmod u+x cloudera-manager-installer.bin
 
 sudo ./cloudera-manager-installer.bin
 
+#Get the Kafka Percels and Install
+
 #Go to CM to set up
-ted-training-1-1.vpc.cloudera.com:7180
+http://ted-cap1-mergejoin-tests-1.vpc.cloudera.com:7180
 
 #Download kudu
 service cloudera-scm-server stop
-wget http://archive.cloudera.com/beta/kudu/csd/KUDU-0.9.1.jar
-mv KUDU-0.9.1.jar /opt/cloudera/csd/
+wget http://archive.cloudera.com/beta/kudu/csd/KUDU-0.10.0.jar
+mv KUDU-0.10.0.jar /opt/cloudera/csd/
 service cloudera-scm-server start
 
 #Download KuduImplala

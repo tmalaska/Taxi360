@@ -2,8 +2,8 @@ package com.cloudera.sa.taxi360.model
 
 import java.text.SimpleDateFormat
 
+import org.apache.kudu.client.RowResult
 import org.apache.spark.sql.Row
-import org.kududb.client.RowResult
 
 class NyTaxiYellowTrip (val vender_id:String,
                          val tpep_pickup_datetime:Long,

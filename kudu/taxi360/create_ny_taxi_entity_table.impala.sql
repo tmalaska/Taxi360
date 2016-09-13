@@ -29,6 +29,6 @@ DISTRIBUTE BY HASH (vender_id) INTO 3 BUCKETS
 TBLPROPERTIES(
   'storage_handler' = 'com.cloudera.kudu.hive.KuduStorageHandler',
   'kudu.table_name' = 'ny_taxi_entity',
-  'kudu.master_addresses' = <ReplaceMeWithKuduMasterHost>:7051',
+  'kudu.master_addresses' = '<ReplaceMeWithKuduMasterHost>:7051',
   'kudu.key_columns' = 'vender_id'
 );

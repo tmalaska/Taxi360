@@ -3,13 +3,12 @@ package com.cloudera.sa.taxi360.streaming.ingestion.kudu
 import com.cloudera.sa.taxi360.model.NyTaxiYellowEntityBuilder.NyTaxiYellowEntityStateWrapper
 import com.cloudera.sa.taxi360.model.{NyTaxiYellowTrip, NyTaxiYellowTripBuilder}
 import kafka.serializer.StringDecoder
+import org.apache.kudu.client.{KuduClient, Operation}
+import org.apache.kudu.client.SessionConfiguration.FlushMode
 import org.apache.solr.common.cloud.ZooKeeperException
 import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
-import org.kududb.client.{KuduClient, Operation}
-import org.kududb.client.SessionConfiguration.FlushMode
-import org.kududb.spark.kudu.KuduContext
 
 object SparkStreamingTaxiTripToKudu {
 
@@ -79,7 +78,7 @@ object SparkStreamingTaxiTripToKudu {
     val topicsSet = kafkaTopicList.split(",").toSet
     val kafkaParams = Map[String, String]("metadata.broker.list" -> kafkaBrokerList)
 
-    val kuduClient = new KuduClient.KuduClientBuilder(kuduMaster).build()
+    val kuduMasterBc = sc.broadcast(kuduMaster)
 
     val messageStream = KafkaUtils.
       createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topicsSet)
@@ -92,7 +91,7 @@ object SparkStreamingTaxiTripToKudu {
 
     tripDStream.foreachRDD(rdd => {
       rdd.foreachPartition(it => {
-        sendTripToKudu(taxiTripTableName, it, kuduClient)
+        sendTripToKudu(taxiTripTableName, it, StaticKuduClient.getKuduClient(kuduMasterBc.value))
       })
     })
 
@@ -117,7 +116,7 @@ object SparkStreamingTaxiTripToKudu {
         Option(new NyTaxiYellowEntityStateWrapper(newState, newTaxiEntity))
       }).foreachRDD(rdd => {
       rdd.foreachPartition(it => {
-        sendEntityToKudu(taxiEntityTableName, it, kuduClient)
+        sendEntityToKudu(taxiEntityTableName, it, StaticKuduClient.getKuduClient(kuduMasterBc.value))
       })
     })
 

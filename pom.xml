@@ -9,15 +9,15 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <spark.version>1.6.0-cdh5.7.1</spark.version>
+        <spark.version>1.6.0-cdh5.8.1</spark.version>
         <scala.version>2.10.4</scala.version>
-        <kafka.version>0.9.0-kafka-2.0.1</kafka.version>
-        <kudu.version>0.9.0</kudu.version>
+        <kafka.version>0.9.0-kafka-2.0.2</kafka.version>
+        <kudu.version>0.10.0</kudu.version>
         <scala.binary.version>2.10</scala.binary.version>
-        <solr.version>4.10.3-cdh5.7.1</solr.version>
+        <solr.version>4.10.3-cdh5.8.1</solr.version>
         <top.dir>${project.basedir}/..</top.dir>
-        <hadoop.version>2.6.0-cdh5.7.1</hadoop.version>
-        <hbase.version>1.2.0-cdh5.7.1</hbase.version>
+        <hadoop.version>2.6.0-cdh5.8.1</hadoop.version>
+        <hbase.version>1.2.0-cdh5.8.1</hbase.version>
     </properties>
 
     <dependencies>
@@ -50,7 +50,7 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <!-- make sure wrong scala version is not pulled in -->
@@ -69,35 +69,35 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
 
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-hive_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
 
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-mllib_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
 
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
 
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-kafka_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
 
         </dependency>
         <dependency>
@@ -128,17 +128,17 @@
         </dependency>
 
         <dependency>
-            <groupId>org.kududb</groupId>
+            <groupId>org.apache.kudu</groupId>
             <artifactId>kudu-client</artifactId>
             <version>${kudu.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.kududb</groupId>
+            <groupId>org.apache.kudu</groupId>
             <artifactId>kudu-mapreduce</artifactId>
             <version>${kudu.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.kududb</groupId>
+            <groupId>org.apache.kudu</groupId>
             <artifactId>kudu-spark_${scala.binary.version}</artifactId>
             <version>${kudu.version}</version>
         </dependency>
@@ -278,7 +278,7 @@
                 <version>2.2</version>
                 <configuration>
                     <shadedArtifactAttached>false</shadedArtifactAttached>
-                    <outputFile>target/AppTrans.jar</outputFile>
+                    <outputFile>target/Taxi360.jar</outputFile>
                     <artifactSet>
                         <includes>
                             <include>*:*</include>

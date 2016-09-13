@@ -1,6 +1,6 @@
 package com.cloudera.sa.taxi360.server.kudu
 
-import org.kududb.client.KuduClient
+import org.apache.kudu.client.KuduClient
 
 object KuduGlobalValues {
 

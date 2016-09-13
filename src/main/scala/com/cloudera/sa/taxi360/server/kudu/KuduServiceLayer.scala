@@ -4,7 +4,7 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.{QueryParam, _}
 
 import com.cloudera.sa.taxi360.model.{NyTaxiYellowEntity, NyTaxiYellowEntityBuilder, NyTaxiYellowTrip, NyTaxiYellowTripBuilder}
-import org.kududb.client.KuduPredicate
+import org.apache.kudu.client.KuduPredicate
 
 import scala.collection.mutable
 

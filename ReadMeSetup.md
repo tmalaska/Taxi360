@@ -5,6 +5,7 @@ mvn clean package
 
 #Upload to cluster
 scp target/Taxi360.jar root@ted-cap1-mergejoin-tests-1.vpc.cloudera.com:./
+scp data/yellow_tripdata_2009-01.100.csv root@ted-cap1-mergejoin-tests-1.vpc.cloudera.com:./
 
 #Log into Cluster
 ssh root@ted-cap1-mergejoin-tests-1.vpc.cloudera.com
@@ -20,23 +21,21 @@ kafka-console-producer --broker-list \
 ted-cap1-mergejoin-tests-4.vpc.cloudera.com:9092,ted-cap1-mergejoin-tests-5.vpc.cloudera.com:9092 \
 --topic taxi-trip-input
 
-#Running the generator
-java -cp Taxi360.jar com.cloudera.sa.taxi360.common.CsvKafkaPublisher \
-ted-cap1-mergejoin-tests-4.vpc.cloudera.com:9092,ted-cap1-mergejoin-tests-5.vpc.cloudera.com:9092 \
-taxi-trip-input 100 0 5 async 1000 10000 20000 ./data/uber_bay_area_lat_lon.csv 1000
-
-"<brokerList> " +
-        "<topicName> " +
-        "<dataFolderOrFile> " +
-        "<sleepPerRecord> " +
-        "<acks> " +
-        "<linger.ms> " +
-        "<producer.type> " +
-        "<batch.size> <salts>"
-
 kafka-console-consumer \
 --zookeeper ted-cap1-mergejoin-tests-1.vpc.cloudera.com:2181 \
 --topic taxi-trip-input
+
+#Running the generator
+java -cp Taxi360.jar com.cloudera.sa.taxi360.common.CsvKafkaPublisher \
+ted-cap1-mergejoin-tests-4.vpc.cloudera.com:9092,ted-cap1-mergejoin-tests-5.vpc.cloudera.com:9092 \
+taxi-trip-input \
+yellow_tripdata_2009-01.10000.csv \
+10 \
+0 \
+10 \
+async \
+1000 \
+100
 
 #Set up Kudu Tables
 Run these in HUE in the impala window
@@ -60,7 +59,7 @@ hadoop jar Taxi360.jar  com.cloudera.sa.taxi360.setup.hbase.CreateSaltedTable ta
 ##Run Spark to SolR
 export JAVA_HOME=/opt/jdk1.8.0_91/
 
-spark-submit --class com.cloudera.sa.apptrans.streaming.ingestion.solr.SparkStreamingAppEventToSolR \
+spark-submit --class com.cloudera.sa.taxi360.streaming.ingestion.solr.SparkStreamingTaxiTripToSolR \
 --master yarn --deploy-mode client --executor-memory 512MB --num-executors 2 --executor-cores 1 \
 Taxi360.jar \
 ted-cap1-mergejoin-tests-4.vpc.cloudera.com:9092,ted-cap1-mergejoin-tests-5.vpc.cloudera.com:9092 \
@@ -78,11 +77,11 @@ Go to the Hue Dashboard Page
 ##Run Spark to Kudu
 export JAVA_HOME=/opt/jdk1.8.0_91/
 
-spark-submit --class com.cloudera.sa.taxi360.streaming.ingestion.solr.SparkStreamingAppEventToKudu \
+spark-submit --class com.cloudera.sa.taxi360.streaming.ingestion.kudu.SparkStreamingTaxiTripToKudu \
 --master yarn --deploy-mode client --executor-memory 512MB --num-executors 2 --executor-cores 1 \
-AppTrans.jar \
+Taxi360.jar \
 ted-cap1-mergejoin-tests-4.vpc.cloudera.com:9092,ted-cap1-mergejoin-tests-5.vpc.cloudera.com:9092 \
-app-event-input \
+taxi-trip-input \
 1 \
 c \
 ted-cap1-mergejoin-tests-1.vpc.cloudera.com \
@@ -111,12 +110,12 @@ account_mart_kudu
 export JAVA_HOME=/opt/jdk1.8.0_91/
 spark-submit --class com.cloudera.sa.taxi360.streaming.ingestion.hbase.SparkStreamingAppEventToHBase \
 --master yarn --deploy-mode client --executor-memory 512MB --num-executors 2 --executor-cores 1 \
-AppTrans.jar \
+Taxi360.jar \
 ted-cap1-mergejoin-tests-4.vpc.cloudera.com:9092,ted-cap1-mergejoin-tests-5.vpc.cloudera.com:9092 \
-app-event-input \
+taxi-trip-input \
 1 \
 c \
-app-event \
+taxi-trip \
 6 \
 tmp/checkpoint \
 /opt/cloudera/parcels/CDH/lib/hbase/conf/
@@ -125,11 +124,11 @@ tmp/checkpoint \
 scan 'card-trans'
 
 ##Rest Server
-com.cloudera.sa.example.card.server.hbase.HBaseRestService \
+com.cloudera.sa.taxi360.streaming.ingestion.hbase.HBaseRestService \
 4242 /
 /opt/cloudera/parcels/CDH/lib/hbase/conf/  \
 6 \
-customer_trans_kudu
+taxi-trip
 
 
 
