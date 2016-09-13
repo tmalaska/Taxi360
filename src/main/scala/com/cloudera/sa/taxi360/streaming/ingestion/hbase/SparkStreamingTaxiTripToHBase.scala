@@ -12,7 +12,7 @@ import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
-object SparkStreamingAppEventToHBase {
+object SparkStreamingTaxiTripToHBase {
   def main(args: Array[String]): Unit = {
     println("Java Version:" + System.getProperty("java.version"))
     println("Java Home:" + System.getProperties().getProperty("java.home"))

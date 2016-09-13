@@ -11,7 +11,7 @@ import org.kududb.client.{KuduClient, Operation}
 import org.kududb.client.SessionConfiguration.FlushMode
 import org.kududb.spark.kudu.KuduContext
 
-object SparkStreamingAppEventToKudu {
+object SparkStreamingTaxiTripToKudu {
 
   val paymentTypeMap = Map("1" -> "Credit card",
     "2" -> "Cash",
