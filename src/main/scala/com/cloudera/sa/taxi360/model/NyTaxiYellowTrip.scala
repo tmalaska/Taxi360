@@ -1,10 +1,13 @@
 package com.cloudera.sa.taxi360.model
 
 import java.text.SimpleDateFormat
+import javax.xml.bind.annotation.{XmlAccessType, XmlAccessorType, XmlRootElement}
 
 import org.apache.kudu.client.RowResult
 import org.apache.spark.sql.Row
 
+@XmlRootElement(name = "CustomerMart")
+@XmlAccessorType(XmlAccessType.FIELD)
 class NyTaxiYellowTrip (val vender_id:String,
                          val tpep_pickup_datetime:Long,
                          val tpep_dropoff_datetime:Long,

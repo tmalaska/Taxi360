@@ -121,15 +121,25 @@ tmp/checkpoint \
 /opt/cloudera/parcels/CDH/lib/hbase/conf/
 
 ##Test Kudu input
-scan 'card-trans'
+scan 'taxi-trip', {'LIMIT' => 5}
 
 ##Rest Server
-com.cloudera.sa.taxi360.streaming.ingestion.hbase.HBaseRestService \
-4242 /
+java -cp Taxi360.jar com.cloudera.sa.taxi360.server.hbase.HBaseRestServer \
+4242 \
 /opt/cloudera/parcels/CDH/lib/hbase/conf/  \
 6 \
 taxi-trip
 
+curl http://ted-cap1-mergejoin-tests-1.vpc.cloudera.com:4242/rest/hello
+
+curl http://ted-cap1-mergejoin-tests-1.vpc.cloudera.com:4242/rest/vender/0CMT/timeline
+
+curl http://ted-cap1-mergejoin-tests-1.vpc.cloudera.com:4242/rest/vender/0CMT/timeline?startTime=0&endTime=1430944160000
+
+0000:0CMT:00000000000
+0000:0CMT:1233115446000                                                                                                                          
+0000:0CMT:1233115446000
+0000:0CMT:1430944160000
 
 
 

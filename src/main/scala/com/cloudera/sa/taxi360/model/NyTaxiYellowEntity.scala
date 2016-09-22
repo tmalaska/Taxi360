@@ -1,8 +1,12 @@
 package com.cloudera.sa.taxi360.model
 
+import javax.xml.bind.annotation.{XmlAccessType, XmlAccessorType, XmlRootElement}
+
 import org.apache.kudu.client.RowResult
 import org.apache.spark.sql.Row
 
+@XmlRootElement(name = "CustomerMart")
+@XmlAccessorType(XmlAccessType.FIELD)
 class NyTaxiYellowEntity (val vender_id:String = "",
                           val total_trips:Int = 0,
                           val total_passengers:Int  = 0,

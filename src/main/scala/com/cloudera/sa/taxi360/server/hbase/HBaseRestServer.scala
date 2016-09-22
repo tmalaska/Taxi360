@@ -17,19 +17,18 @@ object HBaseRestServer {
     val hbaseConfigFolder = args(1)
     val numberOfSalts = args(2).toInt
     val appEventTableName = args(3)
-    val accountMartTableName = args(4)
 
     val conf = HBaseConfiguration.create()
     conf.addResource(new File(hbaseConfigFolder + "hbase-site.xml").toURI.toURL)
 
     HBaseGlobalValues.init(conf, numberOfSalts,
-      appEventTableName, accountMartTableName)
+      appEventTableName)
 
     val server = new Server(port)
 
     val sh = new ServletHolder(classOf[ServletContainer])
     sh.setInitParameter("com.sun.jersey.config.property.resourceConfigClass", "com.sun.jersey.api.core.PackagesResourceConfig")
-    sh.setInitParameter("com.sun.jersey.config.property.packages", "com.cloudera.sa.example.taxi360.server.hbase")
+    sh.setInitParameter("com.sun.jersey.config.property.packages", "com.cloudera.sa.taxi360.server.hbase")
     sh.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true")
 
     val context = new Context(server, "/", Context.SESSIONS)
