@@ -23,6 +23,6 @@ DISTRIBUTE BY HASH (vender_id) INTO 3 BUCKETS
 TBLPROPERTIES(
   'storage_handler' = 'com.cloudera.kudu.hive.KuduStorageHandler',
   'kudu.table_name' = 'ny_taxi_trip',
-  'kudu.master_addresses' = '<ReplaceMeWithKuduMasterHost>:7051',
+  'kudu.master_addresses' = 'ted-malaska-hadoop-world-2.vpc.cloudera.com:7051',
   'kudu.key_columns' = 'vender_id, tpep_pickup_datetime'
 );
