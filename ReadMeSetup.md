@@ -38,6 +38,17 @@ async \
 1000 \
 100
 
+java -cp Taxi360.jar com.cloudera.sa.taxi360.common.CsvKafkaPublisher \
+ted-malaska-hadoop-world-4.vpc.cloudera.com:9092,ted-malaska-hadoop-world-5.vpc.cloudera.com:9092 \
+taxi-trip-input \
+yellow_tripdata_2016-01.csv \
+10 \
+0 \
+10 \
+async \
+1000 \
+100
+
 #Set up Kudu Tables
 Run these in HUE in the impala window
 
@@ -139,14 +150,25 @@ curl http://ted-malaska-hadoop-world-1.vpc.cloudera.com:4242/rest/hello
 
 curl http://ted-malaska-hadoop-world-1.vpc.cloudera.com:4242/rest/vender/0CMT/timeline
 
-curl http://ted-malaska-hadoop-world-1.vpc.cloudera.com:4242/rest/vender/0CMT/timeline?startTime=0&endTime=1430944160000
+curl http://ted-malaska-hadoop-world-1.vpc.cloudera.com:4242/rest/vender/14VTS/timeline?startTime=0&endTime=1430944160000
 
 0000:0CMT:00000000000
 0000:0CMT:1233115446000                                                                                                                          
 0000:0CMT:1233115446000
 0000:0CMT:1430944160000
 
+#Spark created HDFS Nested Table
+spark-submit --class com.cloudera.sa.taxi360.sql.kudu.KuduToNestedHDFS \
+--master yarn --deploy-mode client --executor-memory 512MB --num-executors 2 --executor-cores 1 \
+Taxi360.jar \
+l \
+ted-malaska-hadoop-world-2.vpc.cloudera.com \
+ny_taxi_trip \
+ny_taxi_nested
 
-
+ <runLocal> " +
+        "<kuduMaster> " +
+        "<kuduTaxiTripTableName> " +
+        "<hdfsTaxiNestedTableName> "
 
 
