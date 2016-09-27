@@ -106,7 +106,12 @@ select * from customer_tran_kudu;
 
 ##Rest Server
 java -cp Taxi360.jar  com.cloudera.sa.taxi360.server.kudu.KuduRestServer 4242 \
-ted-malaska-hadoop-world-1.vpc.cloudera.com ny_taxi_trip ny_taxi_entity
+ted-malaska-hadoop-world-2.vpc.cloudera.com ny_taxi_trip ny_taxi_entity
+
+curl http://ted-malaska-hadoop-world-1.vpc.cloudera.com:4242/rest/hello
+
+curl http://ted-malaska-hadoop-world-1.vpc.cloudera.com:4242/rest/vender/14VTS
+
 
 ##Run Spark SQL & MlLib Example
 spark-submit --class com.cloudera.sa.taxi360.etl.machinelearning.kudu.MlLibOnKudu \
