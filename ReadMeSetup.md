@@ -105,12 +105,9 @@ tmp/checkpoint
 select * from customer_tran_kudu;
 
 ##Rest Server
-com.cloudera.sa.taxi360.server.kudu.KuduRestServer 4242 \
+java -cp Taxi360.jar  com.cloudera.sa.taxi360.server.kudu.KuduRestServer 4242 \
 ted-malaska-hadoop-world-1.vpc.cloudera.com ny_taxi_trip ny_taxi_entity
 
-!!!!!!!!!!!!!
-!!!!!!!!!!!
-!!!!!!!!!!!!
 ##Run Spark SQL & MlLib Example
 spark-submit --class com.cloudera.sa.taxi360.etl.machinelearning.kudu.MlLibOnKudu \
 --master yarn --deploy-mode client --executor-memory 512MB --num-executors 2 --executor-cores 1 \
@@ -146,6 +143,7 @@ java -cp Taxi360.jar com.cloudera.sa.taxi360.server.hbase.HBaseRestServer \
 6 \
 taxi-trip
 
+##Rest Server Examples
 curl http://ted-malaska-hadoop-world-1.vpc.cloudera.com:4242/rest/hello
 
 curl http://ted-malaska-hadoop-world-1.vpc.cloudera.com:4242/rest/vender/0CMT/timeline
@@ -165,10 +163,3 @@ l \
 ted-malaska-hadoop-world-2.vpc.cloudera.com \
 ny_taxi_trip \
 ny_taxi_nested
-
- <runLocal> " +
-        "<kuduMaster> " +
-        "<kuduTaxiTripTableName> " +
-        "<hdfsTaxiNestedTableName> "
-
-
